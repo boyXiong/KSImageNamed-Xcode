@@ -9,19 +9,11 @@
 #import "XWhintCell.h"
 #import "XWModel.h"
 
-@interface XWhintCell ()
-
-/** 按钮 */
-@property (nonatomic, assign) NSButtonCell * button;
-
-
-@end
-
 @implementation XWhintCell
 
 - (void)awakeFromNib{
     
-    NSButton *button = [[NSButton alloc] initWithFrame:CGRectMake(150, 0, 17, 17)];
+    NSButton *button = [[NSButton alloc] initWithFrame:CGRectMake(160, 0, 17, 17)];
     button.title = @"x";
     [button setFont:[NSFont boldSystemFontOfSize:15]];
     button.bordered = NO;
@@ -35,6 +27,7 @@
 - (void)setModel:(XWModel *)model{
     
     _model = model;
+    
     self.textField.stringValue = model.methodName;
 }
 

@@ -14,7 +14,7 @@
 
 //boyXiong
 #import "XWCommon.h"
-#import "XWSelectedVC.h"
+#import "XWSettingVC.h"
 #import "XWModel.h"
 
 NSString * const KSShowExtensionInImageCompletionDefaultKey = @"KSShowExtensionInImageCompletion";
@@ -28,7 +28,9 @@ NSString * const KSShowExtensionInImageCompletionDefaultKey = @"KSShowExtensionI
 
 //boyXiong
 /** selected window */
-@property (nonatomic, strong) XWSelectedVC * selectedVC;
+
+@property (nonatomic, assign) XWSettingVC * settingVC;
+
 
 @property (nonatomic, strong) NSMutableArray * hintModels;
 
@@ -82,13 +84,17 @@ NSString * const KSShowExtensionInImageCompletionDefaultKey = @"KSShowExtensionI
 
 
 // boyXiong
-
-- (XWSelectedVC *)selectedVC{
-    if (nil == _selectedVC) {
-         _selectedVC = [[XWSelectedVC alloc] initWithWindowNibName:NSStringFromClass([XWSelectedVC class])];
+#pragma mark - lazy
+- (XWSettingVC *)settingVC{
+    if (nil == _settingVC) {
+        
+        _settingVC = [[XWSettingVC alloc] initWithWindowNibName:NSStringFromClass([XWSettingVC class])];
     }
-    return _selectedVC;
+    
+    return _settingVC;
 }
+
+
 
 - (NSMutableArray *)hintModels{
     
@@ -150,8 +156,29 @@ NSString * const KSShowExtensionInImageCompletionDefaultKey = @"KSShowExtensionI
 //boyXiong
 - (void)showSelectedSet{
     
-    self.selectedVC.hintModels = self.hintModels;
-    [self.selectedVC showWindow:self.selectedVC];
+    self.settingVC.hintModels = self.hintModels;
+    
+    [self.settingVC showWindow:self.settingVC];
+    
+//    if (self.selectedVC.isShowFlag){
+//        
+//        [self.selectedVC close];
+//        
+//    }else{
+////        self.selectedVC.hintModels = self.hintModels;
+////        NSAlert *alert = [[NSAlert alloc] init];
+////        alert.messageText = @"selectedVC";
+////        [alert runModal];
+//        self.selectedVC.showFlag = YES;
+//        [self.selectedVC showWindow:self.selectedVC];
+//    }
+//    
+//    if (!self.selectedVC) {
+//        NSAlert *alert = [[NSAlert alloc] init];
+//        alert.messageText = @"selectedVC null";
+//        [alert runModal];
+//    }
+    
 }
 
 
@@ -163,12 +190,7 @@ static NSMutableSet *methodNameCompletionStrings;
 #pragma mark - 增加其他的model 可以显示
 - (void)addhintName:(NSNotification *)noti{
 
-//    NSAlert *alert = [[NSAlert alloc] init];
-//    alert.messageText = noti.object;
-//    
-//    [alert runModal];
-    
-    
+        
     XWModel *model = [[[XWModel alloc] init] autorelease];
     model.classAndMethod =  [NSString stringWithFormat:@"mage %@",noti.object];
     model.methodDeclaration = [NSString stringWithFormat:@"mage %@",noti.object];

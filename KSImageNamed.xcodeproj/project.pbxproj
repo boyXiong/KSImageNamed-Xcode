@@ -27,10 +27,9 @@
 		586F70C51818C1C900A91B84 /* DVTTextCompletionListWindowController+KSImageNamed.m in Sources */ = {isa = PBXBuildFile; fileRef = 586F70C41818C1C900A91B84 /* DVTTextCompletionListWindowController+KSImageNamed.m */; };
 		EA02E3091BB1B49D007DCED0 /* XWModel.m in Sources */ = {isa = PBXBuildFile; fileRef = EA02E3081BB1B49D007DCED0 /* XWModel.m */; };
 		EA18F86A1BB1B8B800BFC878 /* XWCommon.m in Sources */ = {isa = PBXBuildFile; fileRef = EA18F8691BB1B8B800BFC878 /* XWCommon.m */; };
-		EA3C3EEF1BB2759900625A5A /* boyXiong.bundle in Resources */ = {isa = PBXBuildFile; fileRef = EA3C3EEE1BB2759900625A5A /* boyXiong.bundle */; };
-		EA63059E1BB179DC00E3BD14 /* XWSelectedVC.m in Sources */ = {isa = PBXBuildFile; fileRef = EA63059A1BB179DC00E3BD14 /* XWSelectedVC.m */; };
 		EA6305A21BB1A74E00E3BD14 /* XWhintCell.m in Sources */ = {isa = PBXBuildFile; fileRef = EA6305A11BB1A74E00E3BD14 /* XWhintCell.m */; };
-		EA7FFFC71BB27ADE005B1A03 /* XWSelectedVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = EA7FFFC61BB27ADE005B1A03 /* XWSelectedVC.xib */; };
+		EABCFB1D1BB2928A00816255 /* XWSettingVC.m in Sources */ = {isa = PBXBuildFile; fileRef = EABCFB1B1BB2928A00816255 /* XWSettingVC.m */; };
+		EABCFB1E1BB2928A00816255 /* XWSettingVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = EABCFB1C1BB2928A00816255 /* XWSettingVC.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -72,12 +71,11 @@
 		EA02E3081BB1B49D007DCED0 /* XWModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XWModel.m; sourceTree = "<group>"; };
 		EA18F8681BB1B8B800BFC878 /* XWCommon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XWCommon.h; sourceTree = "<group>"; };
 		EA18F8691BB1B8B800BFC878 /* XWCommon.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XWCommon.m; sourceTree = "<group>"; };
-		EA3C3EEE1BB2759900625A5A /* boyXiong.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = boyXiong.bundle; sourceTree = "<group>"; };
-		EA6305991BB179DC00E3BD14 /* XWSelectedVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XWSelectedVC.h; sourceTree = "<group>"; };
-		EA63059A1BB179DC00E3BD14 /* XWSelectedVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XWSelectedVC.m; sourceTree = "<group>"; };
 		EA6305A01BB1A74E00E3BD14 /* XWhintCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XWhintCell.h; sourceTree = "<group>"; };
 		EA6305A11BB1A74E00E3BD14 /* XWhintCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XWhintCell.m; sourceTree = "<group>"; };
-		EA7FFFC61BB27ADE005B1A03 /* XWSelectedVC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = XWSelectedVC.xib; sourceTree = "<group>"; };
+		EABCFB1A1BB2928A00816255 /* XWSettingVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XWSettingVC.h; sourceTree = "<group>"; };
+		EABCFB1B1BB2928A00816255 /* XWSettingVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XWSettingVC.m; sourceTree = "<group>"; };
+		EABCFB1C1BB2928A00816255 /* XWSettingVC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = XWSettingVC.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -182,7 +180,6 @@
 		EA6305971BB179DC00E3BD14 /* XWSelected */ = {
 			isa = PBXGroup;
 			children = (
-				EA3C3EEE1BB2759900625A5A /* boyXiong.bundle */,
 				EA18F8671BB1B8AD00BFC878 /* Common */,
 				EA6305981BB179DC00E3BD14 /* Controller */,
 				EA63059C1BB179DC00E3BD14 /* Model */,
@@ -194,9 +191,9 @@
 		EA6305981BB179DC00E3BD14 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
-				EA6305991BB179DC00E3BD14 /* XWSelectedVC.h */,
-				EA63059A1BB179DC00E3BD14 /* XWSelectedVC.m */,
-				EA7FFFC61BB27ADE005B1A03 /* XWSelectedVC.xib */,
+				EABCFB1A1BB2928A00816255 /* XWSettingVC.h */,
+				EABCFB1B1BB2928A00816255 /* XWSettingVC.m */,
+				EABCFB1C1BB2928A00816255 /* XWSettingVC.xib */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -271,8 +268,7 @@
 			files = (
 				377E049417C98A0A003665B1 /* Completions.plist in Resources */,
 				37E5302A15FE7DDB00753EB4 /* InfoPlist.strings in Resources */,
-				EA7FFFC71BB27ADE005B1A03 /* XWSelectedVC.xib in Resources */,
-				EA3C3EEF1BB2759900625A5A /* boyXiong.bundle in Resources */,
+				EABCFB1E1BB2928A00816255 /* XWSettingVC.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -287,10 +283,10 @@
 				37A2B52D15FE927F00D9AE1E /* MethodSwizzle.m in Sources */,
 				37CEBA7815FE96F40090E015 /* KSImageNamedIndexCompletionItem.m in Sources */,
 				586F70C51818C1C900A91B84 /* DVTTextCompletionListWindowController+KSImageNamed.m in Sources */,
-				EA63059E1BB179DC00E3BD14 /* XWSelectedVC.m in Sources */,
 				EA6305A21BB1A74E00E3BD14 /* XWhintCell.m in Sources */,
 				3727E3B216AB34AA007DACD3 /* IDEIndexCompletionStrategy+KSImageNamed.m in Sources */,
 				3727E3B516AB350F007DACD3 /* DVTSourceTextView+KSImageNamed.m in Sources */,
+				EABCFB1D1BB2928A00816255 /* XWSettingVC.m in Sources */,
 				37B5873616AF5BD500B4787D /* DVTTextCompletionController+KSImageNamed.m in Sources */,
 				EA18F86A1BB1B8B800BFC878 /* XWCommon.m in Sources */,
 				3772077C16AFD84B005666C3 /* IDEWorkspace+KSImageNamed.m in Sources */,
