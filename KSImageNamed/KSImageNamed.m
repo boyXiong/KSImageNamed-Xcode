@@ -12,6 +12,11 @@
 #import "XcodeMisc.h"
 #import "MethodSwizzle.h"
 
+//boyXiong
+#import "XWCommon.h"
+#import "XWSelectedVC.h"
+#import "XWModel.h"
+
 NSString * const KSShowExtensionInImageCompletionDefaultKey = @"KSShowExtensionInImageCompletion";
 
 @interface KSImageNamed () {
@@ -20,9 +25,18 @@ NSString * const KSShowExtensionInImageCompletionDefaultKey = @"KSShowExtensionI
 @property(nonatomic, strong) NSMutableDictionary *imageCompletions;
 @property(nonatomic, strong) NSMutableSet *indexesToUpdate;
 @property(nonatomic, strong) KSImageNamedPreviewWindow *imageWindow;
+
+//boyXiong
+/** selected window */
+@property (nonatomic, strong) XWSelectedVC * selectedVC;
+
+@property (nonatomic, strong) NSMutableArray * hintModels;
+
+
 @end
 
 @implementation KSImageNamed
+
 
 + (void)pluginDidLoad:(NSBundle *)plugin
 {
@@ -52,11 +66,127 @@ NSString * const KSShowExtensionInImageCompletionDefaultKey = @"KSShowExtensionI
 - (id)init
 {
     if ( (self = [super init]) ) {
+        
         [self setImageCompletions:[NSMutableDictionary dictionary]];
         [self setIndexesToUpdate:[NSMutableSet set]];
+        
+        /** boyXiong */
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(applicationDidFinishLaunching:)
+                                                     name:NSApplicationDidFinishLaunchingNotification
+                                                   object:nil];
     }
     return self;
 }
+
+
+
+// boyXiong
+
+- (XWSelectedVC *)selectedVC{
+    if (nil == _selectedVC) {
+         _selectedVC = [[XWSelectedVC alloc] initWithWindowNibName:NSStringFromClass([XWSelectedVC class])];
+    }
+    return _selectedVC;
+}
+
+- (NSMutableArray *)hintModels{
+    
+    if (nil == _hintModels) {
+        XWModel *model1 = [[[XWModel alloc] init] autorelease];
+        model1.classAndMethod = @"mage imageNamed:";
+        model1.methodDeclaration = @"mage imageNamed:";
+        model1.methodName = @"imageNamed";
+        model1.comment = @"Standrd NSImage/UImage method";
+        
+        
+        XWModel *model2 = [[[XWModel alloc] init] autorelease];
+        model2.classAndMethod = @"mage imageWithNamed:";
+        model2.methodDeclaration = @"mage imageWithNamed:";
+        model2.methodName = @"imageWithNamed";
+        model2.comment = @"Standrd NSImage/UImage method";
+
+        
+        _hintModels = [@[model1, model2] mutableCopy];
+        //classAndMethod	mage imageNamed:
+        //methodDeclaration	imageNamed:
+        //methodName	imageNamed
+        //comment	Standrd NSImage/UImage method
+    }
+    return _hintModels;
+}
+
+
+
+- (void)applicationDidFinishLaunching:(NSNotification*) noti {
+    
+    //1 设置菜单
+    [self addSettingMenu];
+    
+    //2. 添加监听
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(addhintName:) name:kNotiUserAddHint object:nil];
+}
+
+// boyXiong
+-(void) addSettingMenu
+{
+    //1. 获取到Xcode 导航条的Windows 选项菜单
+    NSMenuItem *editMenuItem = [[NSApp mainMenu] itemWithTitle:@"Window"];
+    
+    //2. 如果获取到
+    if (editMenuItem) {
+        
+        //2.1 增加一条划线
+        [[editMenuItem submenu] addItem:[NSMenuItem separatorItem]];
+        
+        //2.2 添加用户偏好测试选项，并增加快捷键
+        NSMenuItem *newMenuItem = [[NSMenuItem alloc] initWithTitle:@"kSImageName" action:@selector(showSelectedSet) keyEquivalent:@"X"];
+        //2.3 添加点击事件
+        [newMenuItem setTarget:self];
+        [[editMenuItem submenu] addItem:newMenuItem];
+    }
+}
+
+//boyXiong
+- (void)showSelectedSet{
+    
+    self.selectedVC.hintModels = self.hintModels;
+    [self.selectedVC showWindow:self.selectedVC];
+}
+
+
+static NSMutableSet *classAndMethodCompletionStrings;
+static NSMutableSet *methodDeclarationCompletionStrings;
+static NSMutableSet *methodNameCompletionStrings;
+
+
+#pragma mark - 增加其他的model 可以显示
+- (void)addhintName:(NSNotification *)noti{
+
+//    NSAlert *alert = [[NSAlert alloc] init];
+//    alert.messageText = noti.object;
+//    
+//    [alert runModal];
+    
+    
+    XWModel *model = [[[XWModel alloc] init] autorelease];
+    model.classAndMethod =  [NSString stringWithFormat:@"mage %@",noti.object];
+    model.methodDeclaration = [NSString stringWithFormat:@"mage %@",noti.object];
+    model.methodName = [NSString stringWithFormat:@"%@",noti.object];
+    model.comment = @"Standrd NSImage/UImage method";
+    
+    [self.hintModels addObject:model];
+    
+    
+    [classAndMethodCompletionStrings addObject:model.classAndMethod];
+    [methodDeclarationCompletionStrings addObject:model.methodDeclaration];
+    [methodNameCompletionStrings addObject:model.methodName];
+
+}
+
+
+
+
 
 - (void)dealloc
 {
@@ -65,6 +195,9 @@ NSString * const KSShowExtensionInImageCompletionDefaultKey = @"KSShowExtensionI
     [self setImageCompletions:nil];
     [self setIndexesToUpdate:nil];
     [self setImageWindow:nil];
+    
+    //boyXiong
+    [self setSelectedVC:nil];
     
     [super dealloc];
 }
@@ -110,23 +243,32 @@ NSString * const KSShowExtensionInImageCompletionDefaultKey = @"KSShowExtensionI
 {
     //Pulls completions out of Completions.plist and creates arrays so the rest of the plugin can do lookups to see if it should be autocompleting a particular method
     //The three different strings are needed because this plugin does raw string matching rather than doing anything fancy like looking at the AST
-    static NSMutableSet *classAndMethodCompletionStrings;
-    static NSMutableSet *methodDeclarationCompletionStrings;
-    static NSMutableSet *methodNameCompletionStrings;
     static dispatch_once_t onceToken;
+    
     dispatch_once(&onceToken, ^{
+        
         NSURL *completionsURL = [[NSBundle bundleForClass:[self class]] URLForResource:@"Completions" withExtension:@"plist"];
+        
         NSArray *completionStrings = [NSArray arrayWithContentsOfURL:completionsURL];
         
         classAndMethodCompletionStrings = [[NSMutableSet alloc] init];
         methodDeclarationCompletionStrings = [[NSMutableSet alloc] init];
         methodNameCompletionStrings = [[NSMutableSet alloc] init];
         
-        for (NSDictionary *nextCompletionDictionary in completionStrings) {
-            [classAndMethodCompletionStrings addObject:[nextCompletionDictionary objectForKey:@"classAndMethod"]];
-            [methodDeclarationCompletionStrings addObject:[nextCompletionDictionary objectForKey:@"methodDeclaration"]];
-            [methodNameCompletionStrings addObject:[nextCompletionDictionary objectForKey:@"methodName"]];
+        for (XWModel *model in self.hintModels) {
+            [classAndMethodCompletionStrings addObject:model.classAndMethod];
+            [methodDeclarationCompletionStrings addObject:model.methodDeclaration];
+            [methodNameCompletionStrings addObject:model.methodName];
+            
         }
+        
+//        for (NSDictionary *nextCompletionDictionary in completionStrings) {
+//           
+//            [classAndMethodCompletionStrings addObject:[nextCompletionDictionary objectForKey:@"classAndMethod"]];
+//            [methodDeclarationCompletionStrings addObject:[nextCompletionDictionary objectForKey:@"methodDeclaration"]];
+//            [methodNameCompletionStrings addObject:[nextCompletionDictionary objectForKey:@"methodName"]];
+//            
+//        }
     });
     
     NSSet *completionStrings = nil;
