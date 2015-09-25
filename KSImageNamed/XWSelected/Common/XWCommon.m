@@ -10,6 +10,9 @@
 
 NSString * const kNotiUserAddHint = @"kNotiUserAddHint";
 
+NSString * const kNotiUserRemoveHint = @"kNotiUserRemoveHint";
 
 NSString * const kViewIdentifier = @"hintViewIdentifier";
+
+
 

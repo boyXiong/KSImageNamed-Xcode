@@ -2,7 +2,7 @@
 //  XWSettingVC.h
 //  KSImageNamed
 //
-//  Created by key on 15/9/23.
+//  Created by boyXiong on 15/9/23.
 //
 //
 
@@ -12,5 +12,9 @@
 @interface XWSettingVC : NSWindowController
 
 @property (nonatomic, strong) NSMutableArray * hintModels;
+
+
+
+- (BOOL)isShowFlag;
 
 @end

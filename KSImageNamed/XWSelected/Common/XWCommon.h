@@ -10,5 +10,7 @@
 
 extern NSString * const kNotiUserAddHint;
 
+extern NSString * const kNotiUserRemoveHint;
+
 extern NSString * const kViewIdentifier;
 

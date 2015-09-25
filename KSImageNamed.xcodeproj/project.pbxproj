@@ -27,6 +27,7 @@
 		586F70C51818C1C900A91B84 /* DVTTextCompletionListWindowController+KSImageNamed.m in Sources */ = {isa = PBXBuildFile; fileRef = 586F70C41818C1C900A91B84 /* DVTTextCompletionListWindowController+KSImageNamed.m */; };
 		EA02E3091BB1B49D007DCED0 /* XWModel.m in Sources */ = {isa = PBXBuildFile; fileRef = EA02E3081BB1B49D007DCED0 /* XWModel.m */; };
 		EA18F86A1BB1B8B800BFC878 /* XWCommon.m in Sources */ = {isa = PBXBuildFile; fileRef = EA18F8691BB1B8B800BFC878 /* XWCommon.m */; };
+		EA590E431BB2CB7F007EECB3 /* XWTool.m in Sources */ = {isa = PBXBuildFile; fileRef = EA590E421BB2CB7F007EECB3 /* XWTool.m */; };
 		EA6305A21BB1A74E00E3BD14 /* XWhintCell.m in Sources */ = {isa = PBXBuildFile; fileRef = EA6305A11BB1A74E00E3BD14 /* XWhintCell.m */; };
 		EABCFB1D1BB2928A00816255 /* XWSettingVC.m in Sources */ = {isa = PBXBuildFile; fileRef = EABCFB1B1BB2928A00816255 /* XWSettingVC.m */; };
 		EABCFB1E1BB2928A00816255 /* XWSettingVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = EABCFB1C1BB2928A00816255 /* XWSettingVC.xib */; };
@@ -71,6 +72,8 @@
 		EA02E3081BB1B49D007DCED0 /* XWModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XWModel.m; sourceTree = "<group>"; };
 		EA18F8681BB1B8B800BFC878 /* XWCommon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XWCommon.h; sourceTree = "<group>"; };
 		EA18F8691BB1B8B800BFC878 /* XWCommon.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XWCommon.m; sourceTree = "<group>"; };
+		EA590E411BB2CB7F007EECB3 /* XWTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XWTool.h; sourceTree = "<group>"; };
+		EA590E421BB2CB7F007EECB3 /* XWTool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XWTool.m; sourceTree = "<group>"; };
 		EA6305A01BB1A74E00E3BD14 /* XWhintCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XWhintCell.h; sourceTree = "<group>"; };
 		EA6305A11BB1A74E00E3BD14 /* XWhintCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XWhintCell.m; sourceTree = "<group>"; };
 		EABCFB1A1BB2928A00816255 /* XWSettingVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XWSettingVC.h; sourceTree = "<group>"; };
@@ -177,9 +180,19 @@
 			path = Common;
 			sourceTree = "<group>";
 		};
+		EA590E401BB2CB73007EECB3 /* Tool */ = {
+			isa = PBXGroup;
+			children = (
+				EA590E411BB2CB7F007EECB3 /* XWTool.h */,
+				EA590E421BB2CB7F007EECB3 /* XWTool.m */,
+			);
+			path = Tool;
+			sourceTree = "<group>";
+		};
 		EA6305971BB179DC00E3BD14 /* XWSelected */ = {
 			isa = PBXGroup;
 			children = (
+				EA590E401BB2CB73007EECB3 /* Tool */,
 				EA18F8671BB1B8AD00BFC878 /* Common */,
 				EA6305981BB179DC00E3BD14 /* Controller */,
 				EA63059C1BB179DC00E3BD14 /* Model */,
@@ -290,6 +303,7 @@
 				37B5873616AF5BD500B4787D /* DVTTextCompletionController+KSImageNamed.m in Sources */,
 				EA18F86A1BB1B8B800BFC878 /* XWCommon.m in Sources */,
 				3772077C16AFD84B005666C3 /* IDEWorkspace+KSImageNamed.m in Sources */,
+				EA590E431BB2CB7F007EECB3 /* XWTool.m in Sources */,
 				37642FEA16B0C754002CC70F /* IDEIndex+KSImageNamed.m in Sources */,
 				1F4ED06816ECBE7500250F46 /* KSImageNamedPreviewWindow.m in Sources */,
 				EA02E3091BB1B49D007DCED0 /* XWModel.m in Sources */,

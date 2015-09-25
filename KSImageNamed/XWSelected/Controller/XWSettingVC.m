@@ -2,13 +2,15 @@
 //  XWSettingVC.m
 //  KSImageNamed
 //
-//  Created by key on 15/9/23.
+//  Created by boyXiong on 15/9/23.
 //
 //
 
 #import "XWSettingVC.h"
 #import "XWModel.h"
 #import "XWhintCell.h"
+#import "XWCommon.h"
+#import "XWTool.h"
 
 @interface XWSettingVC () <NSTableViewDataSource, NSTableViewDelegate, xwHintCellDelegate>
 
@@ -16,6 +18,8 @@
 
 @property (assign) IBOutlet NSTableView *tableView;
 
+/** 是否show */
+@property (nonatomic, assign, getter=isShowFlag) BOOL showFlag;
 
 @end
 
@@ -46,7 +50,7 @@
     
     XWhintCell *result = [tableView makeViewWithIdentifier:tableColumn.identifier owner:self];
     
-//    result.delegate = self;
+    result.delegate = self;
     
     result.model = self.hintModels[row];
     
@@ -61,17 +65,37 @@
 
 - (IBAction)addBtnClicked:(NSButton *)sender {
     
+    [XWTool saveData:self.hintModels];
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:kNotiUserAddHint object:self.hintTextField.stringValue];
+    
     [self close];
+    
+}
+
+- (void)close{
+    [super close];
+    self.showFlag = NO;
+}
+
+- (void)showWindow:(id)sender{
+    
+    self.showFlag = YES;
+    [super showWindow:sender];
 }
 
 
 #pragma mark -  xwHintCellDelegate
 - (void)xwHintCellRemoveHintModel:(XWModel *)model{
     
+    
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:kNotiUserRemoveHint object:model];
+    
     [self.hintModels removeObject:model];
-    
+
     [self.tableView reloadData];
-    
+
 }
 
 @end

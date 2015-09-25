@@ -16,6 +16,7 @@
 #import "XWCommon.h"
 #import "XWSettingVC.h"
 #import "XWModel.h"
+#import "XWTool.h"
 
 NSString * const KSShowExtensionInImageCompletionDefaultKey = @"KSShowExtensionInImageCompletion";
 
@@ -72,7 +73,7 @@ NSString * const KSShowExtensionInImageCompletionDefaultKey = @"KSShowExtensionI
         [self setImageCompletions:[NSMutableDictionary dictionary]];
         [self setIndexesToUpdate:[NSMutableSet set]];
         
-        /** boyXiong */
+        // boyXiong 
         [[NSNotificationCenter defaultCenter] addObserver:self
                                                  selector:@selector(applicationDidFinishLaunching:)
                                                      name:NSApplicationDidFinishLaunchingNotification
@@ -87,6 +88,7 @@ NSString * const KSShowExtensionInImageCompletionDefaultKey = @"KSShowExtensionI
 #pragma mark - lazy
 - (XWSettingVC *)settingVC{
     if (nil == _settingVC) {
+     
         
         _settingVC = [[XWSettingVC alloc] initWithWindowNibName:NSStringFromClass([XWSettingVC class])];
     }
@@ -99,6 +101,11 @@ NSString * const KSShowExtensionInImageCompletionDefaultKey = @"KSShowExtensionI
 - (NSMutableArray *)hintModels{
     
     if (nil == _hintModels) {
+        
+//        _hintModels = [[XWTool data] mutableCopy];
+        
+        if (!_hintModels) {
+        
         XWModel *model1 = [[[XWModel alloc] init] autorelease];
         model1.classAndMethod = @"mage imageNamed:";
         model1.methodDeclaration = @"mage imageNamed:";
@@ -114,6 +121,7 @@ NSString * const KSShowExtensionInImageCompletionDefaultKey = @"KSShowExtensionI
 
         
         _hintModels = [@[model1, model2] mutableCopy];
+        }
         //classAndMethod	mage imageNamed:
         //methodDeclaration	imageNamed:
         //methodName	imageNamed
@@ -130,7 +138,18 @@ NSString * const KSShowExtensionInImageCompletionDefaultKey = @"KSShowExtensionI
     [self addSettingMenu];
     
     //2. 添加监听
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(addhintName:) name:kNotiUserAddHint object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(addHintName:)
+                                                 name:kNotiUserAddHint
+                                               object:nil
+     ];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(removeHintName:)
+                                                 name:kNotiUserRemoveHint
+                                               object:nil
+     ];
+    
 }
 
 // boyXiong
@@ -156,29 +175,14 @@ NSString * const KSShowExtensionInImageCompletionDefaultKey = @"KSShowExtensionI
 //boyXiong
 - (void)showSelectedSet{
     
-    self.settingVC.hintModels = self.hintModels;
-    
-    [self.settingVC showWindow:self.settingVC];
-    
-//    if (self.selectedVC.isShowFlag){
-//        
-//        [self.selectedVC close];
-//        
-//    }else{
-////        self.selectedVC.hintModels = self.hintModels;
-////        NSAlert *alert = [[NSAlert alloc] init];
-////        alert.messageText = @"selectedVC";
-////        [alert runModal];
-//        self.selectedVC.showFlag = YES;
-//        [self.selectedVC showWindow:self.selectedVC];
-//    }
-//    
-//    if (!self.selectedVC) {
-//        NSAlert *alert = [[NSAlert alloc] init];
-//        alert.messageText = @"selectedVC null";
-//        [alert runModal];
-//    }
-    
+    if(self.settingVC.isShowFlag){
+        
+        [self.settingVC close];
+    }else{
+        self.settingVC.hintModels = self.hintModels;
+        
+        [self.settingVC showWindow:self.settingVC];
+    }
 }
 
 
@@ -188,8 +192,9 @@ static NSMutableSet *methodNameCompletionStrings;
 
 
 #pragma mark - 增加其他的model 可以显示
-- (void)addhintName:(NSNotification *)noti{
+- (void)addHintName:(NSNotification *)noti{
 
+    
         
     XWModel *model = [[[XWModel alloc] init] autorelease];
     model.classAndMethod =  [NSString stringWithFormat:@"mage %@",noti.object];
@@ -206,12 +211,27 @@ static NSMutableSet *methodNameCompletionStrings;
 
 }
 
+#pragma mark - 移除用户remove的model
+- (void)removeHintName:(NSNotification *)noti{
+    
+    XWModel *willRemoveModel = noti.object;
+    
+    [classAndMethodCompletionStrings removeObject:willRemoveModel.classAndMethod];
+    [methodDeclarationCompletionStrings removeObject:willRemoveModel.methodDeclaration];
+    [methodNameCompletionStrings removeObject:willRemoveModel.methodName];
 
-
+}
 
 
 - (void)dealloc
 {
+    //写入到字典
+//    for (XWModel *model in self.hintModels) {
+//        
+//
+//    }
+    [NSKeyedArchiver archiveRootObject:self.hintModels toFile:@"/Users/key/Desktop/hint.data"];
+    
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     
     [self setImageCompletions:nil];
@@ -219,7 +239,8 @@ static NSMutableSet *methodNameCompletionStrings;
     [self setImageWindow:nil];
     
     //boyXiong
-    [self setSelectedVC:nil];
+    [self setSettingVC:nil];
+    [self setHintModels:nil];
     
     [super dealloc];
 }
@@ -278,6 +299,8 @@ static NSMutableSet *methodNameCompletionStrings;
         methodNameCompletionStrings = [[NSMutableSet alloc] init];
         
         for (XWModel *model in self.hintModels) {
+            
+            
             [classAndMethodCompletionStrings addObject:model.classAndMethod];
             [methodDeclarationCompletionStrings addObject:model.methodDeclaration];
             [methodNameCompletionStrings addObject:model.methodName];
@@ -297,9 +320,13 @@ static NSMutableSet *methodNameCompletionStrings;
     
     if (type == KSImageNamedCompletionStringTypeClassAndMethod) {
         completionStrings = classAndMethodCompletionStrings;
+        
     } else if (type == KSImageNamedCompletionStringTypeMethodDeclaration) {
+        
         completionStrings = methodDeclarationCompletionStrings;
+        
     } else if (type == KSImageNamedCompletionStringTypeMethodName) {
+        
         completionStrings = methodNameCompletionStrings;
     }
     
@@ -447,7 +474,7 @@ static NSMutableSet *methodNameCompletionStrings;
         NSNumber *isDirectory;
         
         if ([nextURL getResourceValue:&fileName forKey:NSURLNameKey error:NULL] && [nextURL getResourceValue:&isDirectory forKey:NSURLIsDirectoryKey error:NULL] && [isDirectory boolValue]) {
-            if ([[fileName pathExtension] caseInsensitiveCompare:@"imageset"] == NSOrderedSame) {
+            if ([[fileName pathExtension] caseInsensitiveCompare:@"imageset"] == NSOrderedSame || [[fileName pathExtension] caseInsensitiveCompare:@"Assets.xcassets"] == NSOrderedSame ) {
                 KSImageNamedIndexCompletionItem *imageCompletion = [[[KSImageNamedIndexCompletionItem alloc] initWithAssetFileURL:nextURL] autorelease];
                 
                 [imageCompletions addObject:imageCompletion];
