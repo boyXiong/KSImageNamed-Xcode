@@ -122,10 +122,7 @@ NSString * const KSShowExtensionInImageCompletionDefaultKey = @"KSShowExtensionI
         
         _hintModels = [@[model1, model2] mutableCopy];
         }
-        //classAndMethod	mage imageNamed:
-        //methodDeclaration	imageNamed:
-        //methodName	imageNamed
-        //comment	Standrd NSImage/UImage method
+       
     }
     return _hintModels;
 }
@@ -155,6 +152,7 @@ NSString * const KSShowExtensionInImageCompletionDefaultKey = @"KSShowExtensionI
 // boyXiong
 -(void) addSettingMenu
 {
+    
     //1. 获取到Xcode 导航条的Windows 选项菜单
     NSMenuItem *editMenuItem = [[NSApp mainMenu] itemWithTitle:@"Window"];
     
@@ -225,12 +223,7 @@ static NSMutableSet *methodNameCompletionStrings;
 
 - (void)dealloc
 {
-    //写入到字典
-//    for (XWModel *model in self.hintModels) {
-//        
-//
-//    }
-    [NSKeyedArchiver archiveRootObject:self.hintModels toFile:@"/Users/key/Desktop/hint.data"];
+    
     
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     
